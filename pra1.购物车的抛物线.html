@@ -1,0 +1,107 @@
+<!--
+ * @Autor: ErioY
+ * @Date: 2019-10-19 15:33:41
+ * @Email: 1973545559@qq.com
+ * @Github: https://github.com/ErioY
+ * @LastEditors: ErioY
+ * @LastEditTime: 2019-10-19 16:53:32
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+    <style>
+    #ball {
+        position: absolute;
+        left: 0px;
+        top: 0px; 
+        width: 20px;
+        height: 20px;
+        background-color: green;
+        opacity: 0;
+    }
+    #startBox {
+        position: absolute;
+        left: 0px;
+        top: 0px; 
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%; 
+    }
+    #endBox{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        width: 50px;
+        height: 50px;
+        border: 1px #000 solid;
+    }
+    #sum {
+        position: absolute;
+        bottom: 64px;
+        right: 10px;
+        width: 50px;
+        height: 10px;
+        text-align: center;
+        line-height: 10px;
+    }
+    </style>
+</head>
+<body>
+    <input type="button" value="  加入购物车 " id="btnGo">
+    <div id="startBox"></div>
+    <div id="sum">0</div>
+    <div id="endBox"></div>
+    <div id="ball"></div>
+</body>
+</html>
+<script src="js/jquery-3.2.1.min.js"></script>
+<script>
+// x^2 = 2py; //经过坐标中心的下开口的抛物线公式  
+// y^2 = 2px; //经过坐标中心点的右开口的抛物线公式
+let sum = 0;
+function pao() {
+    $("#ball").css("opacity", 1);
+    // 定义起点和终点
+    let x1 = 0;
+    let y1 = 0;
+    let x2 = $("#endBox").offset().left + $("#endBox").outerWidth() / 2;
+    let y2 = $("#endBox").offset().top + $("#endBox").outerHeight() / 2;
+    // 计算 p的值，需要将起点移到原点处，即移动终点，起点也跟着移动
+    let xEnd = x2-x1;
+    let yEnd = y2-y1;
+    let p =  yEnd * yEnd / (2 * xEnd); // 计算p值;
+
+    let x = 0; // 横坐标
+    let myTimer = setInterval(() => {
+        // 一、数据处理
+        // 1、计算数据
+        x++;
+        y = Math.sqrt(2 * p * x); // 计算纵坐标
+        // 2、边界处理
+        if (x >= x2-x1) {
+            clearInterval(myTimer);
+            $("#sum").html(++sum);
+            $("#ball").css("opacity", 0);
+        }
+  
+        // 二、外观处理
+        $("#ball").css({
+            left:x+x1,
+            top:y+y1
+        });
+
+    },5);
+
+}
+
+$(function() {
+    $("#btnGo").click(function() {
+        pao();
+    });
+})
+</script>
